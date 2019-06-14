@@ -1,0 +1,25 @@
+{
+  "name": "shoppinglist",
+  "version": "1.0.0",
+  "description": "First project with electron usage in mind",
+  "main": "main.js",
+  "scripts": {
+    "test": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PkAIR/ShoppingList.git"
+  },
+  "keywords": [
+    "electron",
+    "JS",
+    "shopping",
+    "list"
+  ],
+  "author": "AIR",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PkAIR/ShoppingList/issues"
+  },
+  "homepage": "https://github.com/PkAIR/ShoppingList#readme"
+}
