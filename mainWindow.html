@@ -3,10 +3,15 @@
 
 <head>
     <title>Shopping List Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 
 <body>
-    <h1>Shopping List Test</h1>
+    <nav>
+        <div class="nav-wrapper">
+            <a class="brand-logo center">Shopping List</a>
+        </div>
+    </nav>
     <ul></ul>
 
     <script>
@@ -21,16 +26,22 @@
             const itemText = document.createTextNode(item);
             li.appendChild(itemText);
             ul.appendChild(li);
+            ul.className = 'collection';
+            li.className = 'collection-item';
         });
 
         ipcRenderer.on('item:clear', function(e, item) {
-            ul.innerHTML = null;
+            ul.className = '';
+            ul.innerHTML = '';
         });
 
         ul.addEventListener('dblclick', removeItem);
 
         function removeItem(e) {
             e.target.remove();
+            if (ul.children.length == 0) {
+                ul.className = '';
+            }
         };
     </script>
 </body>
