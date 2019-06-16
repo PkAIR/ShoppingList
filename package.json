@@ -1,25 +1,31 @@
 {
-  "name": "shoppinglist",
-  "version": "1.0.0",
-  "description": "First project with electron usage in mind",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PkAIR/ShoppingList.git"
-  },
-  "keywords": [
-    "electron",
-    "JS",
-    "shopping",
-    "list"
-  ],
-  "author": "AIR",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/PkAIR/ShoppingList/issues"
-  },
-  "homepage": "https://github.com/PkAIR/ShoppingList#readme"
+    "name": "shoppinglist",
+    "version": "1.0.0",
+    "description": "First project with electron usage in mind",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds  --electron-version=1.0.0",
+        "package-win": "electron-packager . shopping-list-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Shopping List\"  --electron-version=1.0.0",
+        "package-linux": "electron-packager . shopping-list-app --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/icon.png --prune=true --out=release-builds  --electron-version=1.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PkAIR/ShoppingList.git"
+    },
+    "keywords": [
+        "electron",
+        "JS",
+        "shopping",
+        "list"
+    ],
+    "author": "AIR",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/PkAIR/ShoppingList/issues"
+    },
+    "homepage": "https://github.com/PkAIR/ShoppingList#readme",
+    "devDependencies": {
+        "electron-packager": "^13.1.1"
+    }
 }
