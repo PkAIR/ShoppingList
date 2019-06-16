@@ -4,7 +4,7 @@
   "description": "First project with electron usage in mind",
   "main": "main.js",
   "scripts": {
-    "test": "electron ."
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
