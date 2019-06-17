@@ -4,7 +4,6 @@ const path = require('path');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
-process.env.NODE_ENV = 'production';
 
 let mainWindow;
 let addWindow;
@@ -15,6 +14,7 @@ app.on('ready', function() {
             nodeIntegration: true
         }
     });
+
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'mainWindow.html'),
         protocol: 'file:',
@@ -42,8 +42,13 @@ function createAddWindow() {
         slashes: true
     }));
 
+    const addMenu = Menu.buildFromTemplate(secondaryMenuTemplate);
+    Menu.setApplicationMenu(addMenu);
+
     addWindow.on('close', function() {
         addWindow = null;
+        const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+        Menu.setApplicationMenu(mainMenu);
     });
 };
 
@@ -78,12 +83,39 @@ const mainMenuTemplate = [{
     ]
 }];
 
+const secondaryMenuTemplate = [{
+    label: 'File',
+    submenu: [{
+            label: 'Quit',
+            accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+            click() {
+                app.quit();
+            }
+        }
+    ]
+}];
+
 if (process.platform == 'darwin') {
     mainMenuTemplate.unshift({});
+    secondaryMenuTemplate.unshift({});
 }
 
 if (process.env.NODE_ENV !== 'production') {
     mainMenuTemplate.push({
+        label: 'Developer Tools',
+        accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+        submenu: [{
+                label: 'Toggle DevTools',
+                click(item, focusedWindows) {
+                    focusedWindows.toggleDevTools();
+                }
+            },
+            {
+                role: 'reload'
+            }
+        ]
+    });
+    secondaryMenuTemplate.push({
         label: 'Developer Tools',
         accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
         submenu: [{
