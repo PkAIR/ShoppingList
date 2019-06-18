@@ -4,6 +4,7 @@ const path = require('path');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
+process.env.NODE_ENV = 'production';
 
 let mainWindow;
 let addWindow;
@@ -19,10 +20,12 @@ app.on('ready', function() {
         pathname: path.join(__dirname, 'mainWindow.html'),
         protocol: 'file:',
         slashes: true
-    }));
+    }));   
 
-    const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-    Menu.setApplicationMenu(mainMenu);
+    mainWindow.on('focus', function() {
+        const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+        Menu.setApplicationMenu(mainMenu);
+    });
 
     mainWindow.on('closed', function() {
         app.quit();
@@ -33,22 +36,24 @@ function createAddWindow() {
     addWindow = new BrowserWindow({
         width: 300,
         height: 200,
-        title: 'Add New Shopping List Item'
+        title: 'Add New Shopping List Item',
+        parent: mainWindow,
+        modal: true
     });
 
     addWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'addWindow.html'),
         protocol: 'file:',
         slashes: true
-    }));
+    }));   
 
-    const addMenu = Menu.buildFromTemplate(secondaryMenuTemplate);
-    Menu.setApplicationMenu(addMenu);
+    addWindow.on('focus', function() {
+        const addMenu = Menu.buildFromTemplate(secondaryMenuTemplate);
+        Menu.setApplicationMenu(addMenu);
+    });
 
     addWindow.on('close', function() {
         addWindow = null;
-        const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-        Menu.setApplicationMenu(mainMenu);
     });
 };
 
