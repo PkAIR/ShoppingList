@@ -15,14 +15,17 @@ app.on('ready', function() {
             nodeIntegration: true
         }
     });
+
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'mainWindow.html'),
         protocol: 'file:',
         slashes: true
-    }));
+    }));   
 
-    const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-    Menu.setApplicationMenu(mainMenu);
+    mainWindow.on('focus', function() {
+        const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+        Menu.setApplicationMenu(mainMenu);
+    });
 
     mainWindow.on('closed', function() {
         app.quit();
@@ -33,14 +36,21 @@ function createAddWindow() {
     addWindow = new BrowserWindow({
         width: 300,
         height: 200,
-        title: 'Add New Shopping List Item'
+        title: 'Add New Shopping List Item',
+        parent: mainWindow,
+        modal: true
     });
 
     addWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'addWindow.html'),
         protocol: 'file:',
         slashes: true
-    }));
+    }));   
+
+    addWindow.on('focus', function() {
+        const addMenu = Menu.buildFromTemplate(secondaryMenuTemplate);
+        Menu.setApplicationMenu(addMenu);
+    });
 
     addWindow.on('close', function() {
         addWindow = null;
@@ -78,12 +88,39 @@ const mainMenuTemplate = [{
     ]
 }];
 
+const secondaryMenuTemplate = [{
+    label: 'File',
+    submenu: [{
+            label: 'Quit',
+            accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+            click() {
+                app.quit();
+            }
+        }
+    ]
+}];
+
 if (process.platform == 'darwin') {
     mainMenuTemplate.unshift({});
+    secondaryMenuTemplate.unshift({});
 }
 
 if (process.env.NODE_ENV !== 'production') {
     mainMenuTemplate.push({
+        label: 'Developer Tools',
+        accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+        submenu: [{
+                label: 'Toggle DevTools',
+                click(item, focusedWindows) {
+                    focusedWindows.toggleDevTools();
+                }
+            },
+            {
+                role: 'reload'
+            }
+        ]
+    });
+    secondaryMenuTemplate.push({
         label: 'Developer Tools',
         accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
         submenu: [{
