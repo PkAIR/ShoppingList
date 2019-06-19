@@ -4,13 +4,16 @@ const path = require('path');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'test';
 
 let mainWindow;
 let addWindow;
 
+// Main method
 app.on('ready', function() {
     mainWindow = new BrowserWindow({
+        width: 400,
+        height: 600,
         webPreferences: {
             nodeIntegration: true
         }
@@ -57,30 +60,25 @@ function createAddWindow() {
     });
 };
 
-ipcMain.on('item:add', function(e, item) {
-    mainWindow.webContents.send('item:add', item);
-    addWindow.close();
-})
-
 const mainMenuTemplate = [{
     label: 'File',
     submenu: [{
             label: 'Add Item',
-            accelerator: process.platform == 'darwin' ? 'Command+N' : 'Ctrl+N',
+            accelerator: onMac() ? 'Command+N' : 'Ctrl+N',
             click() {
                 createAddWindow();
             }
         },
         {
             label: 'Clear Items',
-            accelerator: process.platform == 'darwin' ? 'Command+W' : 'Ctrl+W',
+            accelerator: onMac() ? 'Command+W' : 'Ctrl+W',
             click() {
                 mainWindow.webContents.send('item:clear');
             }
         },
         {
             label: 'Quit',
-            accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+            accelerator: onMac() ? 'Command+Q' : 'Ctrl+Q',
             click() {
                 app.quit();
             }
@@ -92,7 +90,7 @@ const secondaryMenuTemplate = [{
     label: 'File',
     submenu: [{
             label: 'Quit',
-            accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+            accelerator: onMac() ? 'Command+Q' : 'Ctrl+Q',
             click() {
                 app.quit();
             }
@@ -100,15 +98,16 @@ const secondaryMenuTemplate = [{
     ]
 }];
 
-if (process.platform == 'darwin') {
+if (onMac()) {
     mainMenuTemplate.unshift({});
     secondaryMenuTemplate.unshift({});
 }
 
+// Dev mode handler
 if (process.env.NODE_ENV !== 'production') {
     mainMenuTemplate.push({
         label: 'Developer Tools',
-        accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+        accelerator: onMac() ? 'Command+I' : 'Ctrl+I',
         submenu: [{
                 label: 'Toggle DevTools',
                 click(item, focusedWindows) {
@@ -120,9 +119,10 @@ if (process.env.NODE_ENV !== 'production') {
             }
         ]
     });
+
     secondaryMenuTemplate.push({
         label: 'Developer Tools',
-        accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+        accelerator: onMac() ? 'Command+I' : 'Ctrl+I',
         submenu: [{
                 label: 'Toggle DevTools',
                 click(item, focusedWindows) {
@@ -135,3 +135,14 @@ if (process.env.NODE_ENV !== 'production') {
         ]
     });
 }
+
+// Base check method for a platform
+function onMac() {
+    return process.platform == 'darwin';
+}
+
+// Main logic for sending values
+ipcMain.on('item:add', function(e, item) {
+    mainWindow.webContents.send('item:add', item);
+    addWindow.close();
+})

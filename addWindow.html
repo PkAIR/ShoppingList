@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Adding New Item</title>
+    <title>Adding New Item</title>    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 
@@ -30,6 +30,13 @@
         e.preventDefault();
         const item = document.querySelector('#item').value;
         ipcRenderer.send('item:add', item);
+
+        const fs = require('fs') 
+        fs.writeFile('Output.txt', item, (err) => { 
+            // In case of a error throw err. 
+            console.log(item)
+            if (err) throw err; 
+        });
     }
 </script>
 
