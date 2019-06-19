@@ -20,10 +20,10 @@ app.on('ready', function() {
     });
 
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainWindow.html'),
+        pathname: path.join(__dirname, 'pages/mainWindow.html'),
         protocol: 'file:',
         slashes: true
-    }));   
+    }));
 
     mainWindow.on('focus', function() {
         const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
@@ -45,10 +45,10 @@ function createAddWindow() {
     });
 
     addWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'addWindow.html'),
+        pathname: path.join(__dirname, 'pages/addWindow.html'),
         protocol: 'file:',
         slashes: true
-    }));   
+    }));
 
     addWindow.on('focus', function() {
         const addMenu = Menu.buildFromTemplate(secondaryMenuTemplate);
@@ -89,13 +89,12 @@ const mainMenuTemplate = [{
 const secondaryMenuTemplate = [{
     label: 'File',
     submenu: [{
-            label: 'Quit',
-            accelerator: onMac() ? 'Command+Q' : 'Ctrl+Q',
-            click() {
-                app.quit();
-            }
+        label: 'Quit',
+        accelerator: onMac() ? 'Command+Q' : 'Ctrl+Q',
+        click() {
+            app.quit();
         }
-    ]
+    }]
 }];
 
 if (onMac()) {

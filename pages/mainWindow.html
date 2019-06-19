@@ -20,14 +20,21 @@
             ipcRenderer
         } = electron;
         const ul = document.querySelector('ul');
+        const filePath = 'assets/items.txt';
+
+
+        const readline = require('readline');
+        const fs = require('fs');
+        let rl = readline.createInterface({
+            input: fs.createReadStream(filePath)
+        });
+
+        rl.on('line', function(line) {
+            addNewItem(line);
+        });
 
         ipcRenderer.on('item:add', function(e, item) {
-            const li = document.createElement('li');
-            const itemText = document.createTextNode(item);
-            li.appendChild(itemText);
-            ul.appendChild(li);
-            ul.className = 'collection';
-            li.className = 'collection-item';
+            addNewItem(item);
         });
 
         ipcRenderer.on('item:clear', function(e, item) {
@@ -43,6 +50,15 @@
                 ul.className = '';
             }
         };
+
+        function addNewItem(item) {
+            const li = document.createElement('li');
+            const itemText = document.createTextNode(item);
+            li.appendChild(itemText);
+            ul.appendChild(li);
+            ul.className = 'collection';
+            li.className = 'collection-item';
+        }
     </script>
 </body>
 
