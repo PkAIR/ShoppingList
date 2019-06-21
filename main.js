@@ -98,8 +98,8 @@ const secondaryMenuTemplate = [{
 }];
 
 if (onMac()) {
-    mainMenuTemplate.unshift({});
-    secondaryMenuTemplate.unshift({});
+    mainMenuTemplate.unshift({label: ''});
+    secondaryMenuTemplate.unshift({label: ''});
 }
 
 // Dev mode handler
