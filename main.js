@@ -101,8 +101,8 @@ const secondaryMenuTemplate = [{
 }];
 
 if (process.platform == 'darwin') {
-    mainMenuTemplate.unshift({});
-    secondaryMenuTemplate.unshift({});
+    mainMenuTemplate.unshift({label: ''});
+    secondaryMenuTemplate.unshift({label: ''});
 }
 
 if (process.env.NODE_ENV !== 'production') {
