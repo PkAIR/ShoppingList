@@ -17,8 +17,7 @@
         </form>
     </div>
 </body>
-<script>
-    const electron = require('electron');
+<script src='../main.js'>
     const {
         ipcRenderer
     } = electron;
@@ -30,6 +29,12 @@
         e.preventDefault();
         const item = document.querySelector('#item').value;
         ipcRenderer.send('item:add', item);
+
+        const fs = require('fs')
+        const filePath = 'assets/items.txt';
+        fs.appendFileSync(filePath, item, (err) => {
+            if (err) throw err;
+        });
     }
 </script>
 
