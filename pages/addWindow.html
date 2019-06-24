@@ -32,9 +32,10 @@
         if (item.trim()) {
             ipcRenderer.send('item:add', item);
 
-            const fs = require('fs')
+            const fs = require('fs');
+            const os = require('os');
             const filePath = 'assets/items.txt';
-            fs.appendFileSync(filePath, item + Os.EOS, (err) => {
+            fs.appendFileSync(filePath, item + os.EOL, (err) => {
                 if (err) throw err;
             });
         }
