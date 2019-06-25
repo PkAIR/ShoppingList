@@ -22,7 +22,6 @@
         const ul = document.querySelector('ul');
         const filePath = 'assets/items.txt';
 
-
         const readline = require('readline');
         const fs = require('fs');
         let rl = readline.createInterface({
@@ -58,7 +57,7 @@
                 let dataArray = data.split('\n');
                 let lastIndex = -1;
 
-                for (let index=0; index<dataArray.length; index++) {
+                for (let index = 0; index < dataArray.length; index++) {
                     if (dataArray[index].includes(valueToDelete)) { 
                         lastIndex = index;
                         break; 

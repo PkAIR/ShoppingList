@@ -28,7 +28,7 @@
 
     function submitForm(e) {
         e.preventDefault();
-        const item = document.querySelector('#item').value;
+        const item = document.querySelector('#item').value.trim();
         if (item.trim()) {
             ipcRenderer.send('item:add', item);
 
@@ -40,6 +40,24 @@
             });
         }
     }
-</script>
 
+    function findItemInFile(item) {
+        var fs = require('fs');
+        fs.readFile('assets/items.txt', {encoding: 'utf-8'}, function(err, data) {
+            if (err) return false;
+            
+            let dataArray = data.split('\n');
+            let lastIndex = -1;
+
+            for (let index = 0; index < dataArray.length; index++) {
+                if (dataArray[index].includes(item)) { 
+                    alert('Already added');
+                    return true; 
+                }
+            }
+
+            return false;
+        });
+    }
+</script>
 </html>
