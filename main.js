@@ -19,6 +19,7 @@ app.on('ready', function() {
         }
     });
 
+    mainWindow.show();
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'pages/mainWindow.html'),
         protocol: 'file:',
@@ -41,7 +42,10 @@ function createAddWindow() {
         height: 200,
         title: 'Add New Shopping List Item',
         parent: mainWindow,
-        modal: true
+        modal: true,
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
     addWindow.loadURL(url.format({
