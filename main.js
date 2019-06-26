@@ -2,7 +2,32 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
-const { app, BrowserWindow, Menu, ipcMain } = electron;
+function ToDoList(listOfItems) {
+    this._listOfItems = listOfItems;
+    
+    this.getToDoList = () => {
+        return this._listOfItems;
+    }
+
+    this.addItem = (item) => {
+        this._listOfItems.push(item);
+    }
+
+    this.deleteItem = () => {
+        this._listOfItems = this._listOfItems.filter(function(item, index, arr) {
+            value === item;
+        });
+    }
+
+    this.deleteToDoList = () => {
+        this._listOfItems = [];
+    }
+}
+
+global.toDoList = new ToDoList([]);
+readItemsFromFile();
+
+const { app, BrowserWindow, Menu, ipcMain, ipcRenderer } = electron;
 
 process.env.NODE_ENV = 'test';
 
@@ -25,6 +50,10 @@ app.on('ready', function() {
         protocol: 'file:',
         slashes: true
     }));
+
+    mainWindow.webContents.on('did-finish-load', () => {
+        mainWindow.webContents.send('items:upload', global.toDoList);
+    });    
 
     mainWindow.on('focus', function() {
         const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
@@ -147,5 +176,20 @@ function onMac() {
 // Main logic for sending values
 ipcMain.on('item:add', function(e, item) {
     mainWindow.webContents.send('item:add', item);
+    
+    global.toDoList.addItem(item);
     addWindow.close();
 })
+
+function readItemsFromFile() {
+    var fs = require('fs');
+    fs.readFile('assets/items.txt', {encoding: 'utf-8'}, function(err, data) {
+        if (err) throw error;
+
+        let dataArray = data.split('\n');
+        
+        for (let index = 0; index < dataArray.length; index++) {
+            global.toDoList.addItem(dataArray[index]);
+        }
+    });
+}

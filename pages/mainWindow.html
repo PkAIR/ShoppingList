@@ -19,6 +19,15 @@
         const {
             ipcRenderer
         } = electron;
+       
+        ipcRenderer.on('items:upload', function(event, data) {
+            let lastIndex = -1;
+            let todoList = data._listOfItems;
+            for (let index = 0; index < todoList.length; index++) {
+                addNewItem(todoList[index]);
+            }
+        })
+        
         const ul = document.querySelector('ul');
         const filePath = 'assets/items.txt';
 
@@ -28,13 +37,13 @@
             input: fs.createReadStream(filePath)
         });
 
-        rl.on('line', function(line) {
+        /*rl.on('line', function(line) {
             addNewItem(line);
         });
 
         ipcRenderer.on('item:add', function(e, item) {
             addNewItem(item);
-        });
+        });*/
 
         ipcRenderer.on('item:clear', function(e, item) {
             ul.className = '';
