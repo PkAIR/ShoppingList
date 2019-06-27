@@ -184,6 +184,11 @@ ipcMain.on('item:add', function(e, item) {
     addWindow.close();
 })
 
+ipcMain.on('items:flush', function(e, item) {
+    global.toDoList.deleteToDoList();
+    writeItemsToFile(global.toDoList.getToDoList())
+})
+
 function readItemsFromFile() {
     fs.readFile(PATH_TO_FILE, {encoding: 'utf-8'}, function(err, data) {
         if (err) throw error;

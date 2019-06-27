@@ -37,7 +37,7 @@
         ipcRenderer.on('item:clear', function(e, item) {
             ul.className = '';
             ul.innerHTML = '';
-            // TODO delete all from file and object
+            e.sender.send('items:flush', item);
         });
 
         ul.addEventListener('dblclick', removeItem);
