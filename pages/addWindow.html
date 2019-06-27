@@ -31,33 +31,8 @@
         const item = document.querySelector('#item').value.trim();
         if (item.trim()) {
             ipcRenderer.send('item:add', item);
-
-            const fs = require('fs');
-            const os = require('os');
-            const filePath = 'assets/items.txt';
-            fs.appendFileSync(filePath, item + os.EOL, (err) => {
-                if (err) throw err;
-            });
         }
     }
-
-    function findItemInFile(item) {
-        var fs = require('fs');
-        fs.readFile('assets/items.txt', {encoding: 'utf-8'}, function(err, data) {
-            if (err) return false;
-            
-            let dataArray = data.split('\n');
-            let lastIndex = -1;
-
-            for (let index = 0; index < dataArray.length; index++) {
-                if (dataArray[index].includes(item)) { 
-                    alert('Already added');
-                    return true; 
-                }
-            }
-
-            return false;
-        });
-    }
 </script>
+
 </html>

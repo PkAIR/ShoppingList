@@ -13,65 +13,43 @@
         </div>
     </nav>
     <ul></ul>
+</body>
 
     <script>
         const electron = require('electron');
         const {
             ipcRenderer
         } = electron;
+       
+        ipcRenderer.on('items:upload', (event, data) => {
+            let lastIndex = -1;
+            let todoList = data._listOfItems;
+            data._listOfItems.forEach((elem) => {
+                addNewItem(elem);
+            });
+        })
+        
         const ul = document.querySelector('ul');
-        const filePath = 'assets/items.txt';
-
-        const readline = require('readline');
-        const fs = require('fs');
-        let rl = readline.createInterface({
-            input: fs.createReadStream(filePath)
-        });
-
-        rl.on('line', function(line) {
-            addNewItem(line);
-        });
-
-        ipcRenderer.on('item:add', function(e, item) {
+        
+        ipcRenderer.on('item:add', (e, item) => {
             addNewItem(item);
         });
-
-        ipcRenderer.on('item:clear', function(e, item) {
+        
+        ipcRenderer.on('item:clear', (e, item) => {
             ul.className = '';
             ul.innerHTML = '';
+            e.sender.send('items:flush', item);
         });
 
         ul.addEventListener('dblclick', removeItem);
 
         function removeItem(e) {
             let valueToDelete = e.target.textContent;
+            ipcRenderer.send('item:delete', valueToDelete);
             e.target.remove();
             if (ul.children.length == 0) {
                 ul.className = '';
             }
-
-            var fs = require('fs')
-            fs.readFile('assets/items.txt', {encoding: 'utf-8'}, function(err, data) {
-                if (err) throw error;
-
-                let dataArray = data.split('\n');
-                let lastIndex = -1;
-
-                for (let index = 0; index < dataArray.length; index++) {
-                    if (dataArray[index].includes(valueToDelete)) { 
-                        lastIndex = index;
-                        break; 
-                    }
-                }
-
-                dataArray.splice(lastIndex, 1);
-
-        
-                const updatedData = dataArray.join('\n');
-                fs.writeFile('assets/items.txt', updatedData, (err) => {
-                    if (err) throw err;
-                });
-            });
         };
 
         function addNewItem(item) {
@@ -83,5 +61,5 @@
             li.className = 'collection-item';
         }
     </script>
-</body>
+
 </html>
