@@ -16,10 +16,9 @@ function ToDoList(listOfItems) {
         this._listOfItems.push(item);
     }
 
-    this.deleteItem = () => {
-        this._listOfItems = this._listOfItems.filter(function(item, index, arr) {
-            value === item;
-        });
+    this.deleteItem = (item) => {
+        var index = this._listOfItems.indexOf(item);
+        if (index !== -1) this._listOfItems.splice(index, 1);
     }
 
     this.deleteToDoList = () => {
@@ -186,6 +185,12 @@ ipcMain.on('item:add', function(e, item) {
 
 ipcMain.on('items:flush', function(e, item) {
     global.toDoList.deleteToDoList();
+    writeItemsToFile(global.toDoList.getToDoList())
+})
+
+ipcMain.on('item:delete', function(e, item) {
+    global.toDoList.deleteItem(item);
+    console.log(global.toDoList.getToDoList());
     writeItemsToFile(global.toDoList.getToDoList())
 })
 

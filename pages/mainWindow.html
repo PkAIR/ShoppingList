@@ -23,9 +23,9 @@
         ipcRenderer.on('items:upload', function(event, data) {
             let lastIndex = -1;
             let todoList = data._listOfItems;
-            for (let index = 0; index < todoList.length; index++) {
-                addNewItem(todoList[index]);
-            }
+            data._listOfItems.forEach(function(elem) {
+                addNewItem(elem);
+            });
         })
         
         const ul = document.querySelector('ul');
@@ -44,32 +44,11 @@
 
         function removeItem(e) {
             let valueToDelete = e.target.textContent;
+            ipcRenderer.send('item:delete', valueToDelete);
             e.target.remove();
             if (ul.children.length == 0) {
                 ul.className = '';
             }
-
-            var fs = require('fs')
-            fs.readFile('assets/items.txt', {encoding: 'utf-8'}, function(err, data) {
-                if (err) throw error;
-
-                let dataArray = data.split('\n');
-                let lastIndex = -1;
-
-                for (let index = 0; index < dataArray.length; index++) {
-                    if (dataArray[index].includes(valueToDelete)) { 
-                        lastIndex = index;
-                        break; 
-                    }
-                }
-
-                dataArray.splice(lastIndex, 1);
-        
-                const updatedData = dataArray.join('\n');
-                fs.writeFile('assets/items.txt', updatedData, (err) => {
-                    if (err) throw err;
-                });
-            });
         };
 
         function addNewItem(item) {
