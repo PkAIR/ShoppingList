@@ -1,35 +1,15 @@
 const electron = require('electron');
+const ToDoList = require('./models/todo_list');
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+
+const { app, BrowserWindow, Menu, ipcMain } = electron;
 const PATH_TO_FILE = 'assets/items.txt';
-
-function ToDoList(listOfItems) {
-    this._listOfItems = listOfItems;
-    
-    this.getToDoList = () => {
-        return this._listOfItems;
-    }
-
-    this.addItem = (item) => {
-        this._listOfItems.push(item);
-    }
-
-    this.deleteItem = (item) => {
-        var index = this._listOfItems.indexOf(item);
-        if (index !== -1) this._listOfItems.splice(index, 1);
-    }
-
-    this.deleteToDoList = () => {
-        this._listOfItems = [];
-    }
-}
 
 global.toDoList = new ToDoList([]);
 readItemsFromFile();
-
-const { app, BrowserWindow, Menu, ipcMain, ipcRenderer } = electron;
 
 process.env.NODE_ENV = 'test';
 
