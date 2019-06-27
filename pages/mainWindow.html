@@ -29,25 +29,15 @@
         })
         
         const ul = document.querySelector('ul');
-        const filePath = 'assets/items.txt';
-
-        const readline = require('readline');
-        const fs = require('fs');
-        let rl = readline.createInterface({
-            input: fs.createReadStream(filePath)
-        });
-
-        /*rl.on('line', function(line) {
-            addNewItem(line);
-        });
-
+        
         ipcRenderer.on('item:add', function(e, item) {
             addNewItem(item);
-        });*/
-
+        });
+        
         ipcRenderer.on('item:clear', function(e, item) {
             ul.className = '';
             ul.innerHTML = '';
+            // TODO delete all from file and object
         });
 
         ul.addEventListener('dblclick', removeItem);
@@ -74,7 +64,6 @@
                 }
 
                 dataArray.splice(lastIndex, 1);
-
         
                 const updatedData = dataArray.join('\n');
                 fs.writeFile('assets/items.txt', updatedData, (err) => {

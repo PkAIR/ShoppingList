@@ -1,6 +1,9 @@
 const electron = require('electron');
 const url = require('url');
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
+const PATH_TO_FILE = 'assets/items.txt';
 
 function ToDoList(listOfItems) {
     this._listOfItems = listOfItems;
@@ -176,20 +179,28 @@ function onMac() {
 // Main logic for sending values
 ipcMain.on('item:add', function(e, item) {
     mainWindow.webContents.send('item:add', item);
-    
     global.toDoList.addItem(item);
+    writeItemsToFile(global.toDoList.getToDoList())
     addWindow.close();
 })
 
 function readItemsFromFile() {
-    var fs = require('fs');
-    fs.readFile('assets/items.txt', {encoding: 'utf-8'}, function(err, data) {
+    fs.readFile(PATH_TO_FILE, {encoding: 'utf-8'}, function(err, data) {
         if (err) throw error;
 
-        let dataArray = data.split('\n');
-        
-        for (let index = 0; index < dataArray.length; index++) {
-            global.toDoList.addItem(dataArray[index]);
-        }
+        let dataArray = (data.split(os.EOL)).filter(function(elem) {
+            return elem.trim();
+        });
+
+        dataArray.forEach(function(elem) {
+            global.toDoList.addItem(elem);
+        });
+    });
+}
+
+function writeItemsToFile() {        
+    const updatedData = global.toDoList.getToDoList().join(os.EOL);
+    fs.writeFile(PATH_TO_FILE, updatedData, (err) => {
+        if (err) throw err;
     });
 }
