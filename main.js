@@ -17,7 +17,7 @@ let mainWindow;
 let addWindow;
 
 // Main method
-app.on('ready', function() {
+app.on('ready', () => {
     mainWindow = new BrowserWindow({
         width: 400,
         height: 600,
@@ -37,12 +37,12 @@ app.on('ready', function() {
         mainWindow.webContents.send('items:upload', global.toDoList);
     });    
 
-    mainWindow.on('focus', function() {
+    mainWindow.on('focus', () => {
         const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
         Menu.setApplicationMenu(mainMenu);
     });
 
-    mainWindow.on('closed', function() {
+    mainWindow.on('closed', () => {
         app.quit();
     });
 });
@@ -65,12 +65,12 @@ function createAddWindow() {
         slashes: true
     }));
 
-    addWindow.on('focus', function() {
+    addWindow.on('focus', () => {
         const addMenu = Menu.buildFromTemplate(secondaryMenuTemplate);
         Menu.setApplicationMenu(addMenu);
     });
 
-    addWindow.on('close', function() {
+    addWindow.on('close', () => {
         addWindow = null;
     });
 };
@@ -155,34 +155,32 @@ function onMac() {
     return process.platform == 'darwin';
 }
 
-// Main logic for sending values
-ipcMain.on('item:add', function(e, item) {
+ipcMain.on('item:add', (e, item) => {
     mainWindow.webContents.send('item:add', item);
     global.toDoList.addItem(item);
     writeItemsToFile(global.toDoList.getToDoList())
     addWindow.close();
 })
 
-ipcMain.on('items:flush', function(e, item) {
+ipcMain.on('items:flush', (e, item) => {
     global.toDoList.deleteToDoList();
     writeItemsToFile(global.toDoList.getToDoList())
 })
 
-ipcMain.on('item:delete', function(e, item) {
+ipcMain.on('item:delete', (e, item) => {
     global.toDoList.deleteItem(item);
-    console.log(global.toDoList.getToDoList());
     writeItemsToFile(global.toDoList.getToDoList())
 })
 
 function readItemsFromFile() {
-    fs.readFile(PATH_TO_FILE, {encoding: 'utf-8'}, function(err, data) {
+    fs.readFile(PATH_TO_FILE, {encoding: 'utf-8'}, (err, data) => {
         if (err) throw error;
 
-        let dataArray = (data.split(os.EOL)).filter(function(elem) {
+        let dataArray = (data.split(os.EOL)).filter((elem) => {
             return elem.trim();
         });
 
-        dataArray.forEach(function(elem) {
+        dataArray.forEach((elem) => {
             global.toDoList.addItem(elem);
         });
     });

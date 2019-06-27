@@ -13,6 +13,7 @@
         </div>
     </nav>
     <ul></ul>
+</body>
 
     <script>
         const electron = require('electron');
@@ -20,21 +21,21 @@
             ipcRenderer
         } = electron;
        
-        ipcRenderer.on('items:upload', function(event, data) {
+        ipcRenderer.on('items:upload', (event, data) => {
             let lastIndex = -1;
             let todoList = data._listOfItems;
-            data._listOfItems.forEach(function(elem) {
+            data._listOfItems.forEach((elem) => {
                 addNewItem(elem);
             });
         })
         
         const ul = document.querySelector('ul');
         
-        ipcRenderer.on('item:add', function(e, item) {
+        ipcRenderer.on('item:add', (e, item) => {
             addNewItem(item);
         });
         
-        ipcRenderer.on('item:clear', function(e, item) {
+        ipcRenderer.on('item:clear', (e, item) => {
             ul.className = '';
             ul.innerHTML = '';
             e.sender.send('items:flush', item);
@@ -60,5 +61,5 @@
             li.className = 'collection-item';
         }
     </script>
-</body>
+
 </html>

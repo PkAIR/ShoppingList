@@ -11,7 +11,7 @@ class ToDoList {
         };
 
         this.deleteItem = (item) => {
-            this._listOfItems = this._listOfItems.filter(function (elem) {
+            this._listOfItems = this._listOfItems.filter((elem) => {
                 return elem != item;
             });
         };
