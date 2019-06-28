@@ -12,6 +12,7 @@
             <a class="brand-logo center">Shopping List</a>
         </div>
     </nav>
+    <h4 class="right-align" style="visibility: visible;">No Items To Display</h4>
     <ul></ul>
 </body>
 
@@ -27,10 +28,16 @@
             data._listOfItems.forEach((elem) => {
                 addNewItem(elem);
             });
+
+            if (data._listOfItems.length == 0) {
+                changeHeaderTo(HEADER_NO_ELEMS);
+            }
         })
         
         const ul = document.querySelector('ul');
-        
+        const HEADER_NO_ELEMS =  'No Items To Display';
+        const MAIN_HEADER = 'Here we go:';
+
         ipcRenderer.on('item:add', (e, item) => {
             addNewItem(item);
         });
@@ -38,6 +45,7 @@
         ipcRenderer.on('item:clear', (e, item) => {
             ul.className = '';
             ul.innerHTML = '';
+            changeHeaderTo(HEADER_NO_ELEMS);
             e.sender.send('items:flush', item);
         });
 
@@ -48,7 +56,8 @@
             ipcRenderer.send('item:delete', valueToDelete);
             e.target.remove();
             if (ul.children.length == 0) {
-                ul.className = '';
+                ul.className = '';                
+                changeHeaderTo(HEADER_NO_ELEMS);
             }
         };
 
@@ -57,8 +66,21 @@
             const itemText = document.createTextNode(item);
             li.appendChild(itemText);
             ul.appendChild(li);
+            changeHeaderTo(MAIN_HEADER);
             ul.className = 'collection';
             li.className = 'collection-item';
+        }
+
+        function changeHeaderTo(text) {
+            var header = document.querySelector("h4");
+            if (text === MAIN_HEADER) {
+                header.style.className = 'left-align';
+                header.textContent = MAIN_HEADER;
+            }
+            if (text === HEADER_NO_ELEMS) {
+                header.style.className = 'right-align';
+                header.textContent = HEADER_NO_ELEMS;
+            }
         }
     </script>
 
