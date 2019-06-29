@@ -16,72 +16,72 @@
     <ul></ul>
 </body>
 
-    <script>
-        const electron = require('electron');
-        const {
-            ipcRenderer
-        } = electron;
-       
-        ipcRenderer.on('items:upload', (event, data) => {
-            let lastIndex = -1;
-            let todoList = data._listOfItems;
-            data._listOfItems.forEach((elem) => {
-                addNewItem(elem);
-            });
+<script>
+    const electron = require('electron');
+    const {
+        ipcRenderer
+    } = electron;
 
-            if (data._listOfItems.length == 0) {
-                changeHeaderTo(HEADER_NO_ELEMS);
-            }
-        })
-        
-        const ul = document.querySelector('ul');
-        const HEADER_NO_ELEMS =  'No Items To Display';
-        const MAIN_HEADER = 'Here we go:';
-
-        ipcRenderer.on('item:add', (e, item) => {
-            addNewItem(item);
+    ipcRenderer.on('items:upload', (event, data) => {
+        let lastIndex = -1;
+        let todoList = data._listOfItems;
+        data._listOfItems.forEach((elem) => {
+            addNewItem(elem);
         });
-        
-        ipcRenderer.on('item:clear', (e, item) => {
-            ul.className = '';
-            ul.innerHTML = '';
+
+        if (data._listOfItems.length == 0) {
             changeHeaderTo(HEADER_NO_ELEMS);
-            e.sender.send('items:flush', item);
-        });
-
-        ul.addEventListener('dblclick', removeItem);
-
-        function removeItem(e) {
-            let valueToDelete = e.target.textContent;
-            ipcRenderer.send('item:delete', valueToDelete);
-            e.target.remove();
-            if (ul.children.length == 0) {
-                ul.className = '';                
-                changeHeaderTo(HEADER_NO_ELEMS);
-            }
-        };
-
-        function addNewItem(item) {
-            const li = document.createElement('li');
-            const itemText = document.createTextNode(item);
-            li.appendChild(itemText);
-            ul.appendChild(li);
-            changeHeaderTo(MAIN_HEADER);
-            ul.className = 'collection';
-            li.className = 'collection-item';
         }
+    })
 
-        function changeHeaderTo(text) {
-            var header = document.querySelector("h4");
-            if (text === MAIN_HEADER) {
-                header.style.className = 'left-align';
-                header.textContent = MAIN_HEADER;
-            }
-            if (text === HEADER_NO_ELEMS) {
-                header.style.className = 'right-align';
-                header.textContent = HEADER_NO_ELEMS;
-            }
+    const ul = document.querySelector('ul');
+    const HEADER_NO_ELEMS = 'No Items To Display';
+    const MAIN_HEADER = 'Here we go:';
+
+    ipcRenderer.on('item:add', (e, item) => {
+        addNewItem(item);
+    });
+
+    ipcRenderer.on('item:clear', (e, item) => {
+        ul.className = '';
+        ul.innerHTML = '';
+        changeHeaderTo(HEADER_NO_ELEMS);
+        e.sender.send('items:flush', item);
+    });
+
+    ul.addEventListener('dblclick', removeItem);
+
+    function removeItem(e) {
+        let valueToDelete = e.target.textContent;
+        ipcRenderer.send('item:delete', valueToDelete);
+        e.target.remove();
+        if (ul.children.length == 0) {
+            ul.className = '';
+            changeHeaderTo(HEADER_NO_ELEMS);
         }
-    </script>
+    };
+
+    function addNewItem(item) {
+        const li = document.createElement('li');
+        const itemText = document.createTextNode(item);
+        li.appendChild(itemText);
+        ul.appendChild(li);
+        changeHeaderTo(MAIN_HEADER);
+        ul.className = 'collection';
+        li.className = 'collection-item';
+    }
+
+    function changeHeaderTo(text) {
+        var header = document.querySelector("h4");
+        if (text === MAIN_HEADER) {
+            header.style.className = 'left-align';
+            header.textContent = MAIN_HEADER;
+        }
+        if (text === HEADER_NO_ELEMS) {
+            header.style.className = 'right-align';
+            header.textContent = HEADER_NO_ELEMS;
+        }
+    }
+</script>
 
 </html>
