@@ -74,11 +74,11 @@
     function changeHeaderTo(text) {
         var header = document.querySelector("h4");
         if (text === MAIN_HEADER) {
-            header.style.className = 'left-align';
+            header.className = 'left-align';
             header.textContent = MAIN_HEADER;
         }
         if (text === HEADER_NO_ELEMS) {
-            header.style.className = 'right-align';
+            header.className = 'right-align';
             header.textContent = HEADER_NO_ELEMS;
         }
     }
