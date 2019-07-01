@@ -35,7 +35,7 @@ app.on('ready', () => {
 
     mainWindow.webContents.on('did-finish-load', () => {
         mainWindow.webContents.send('items:upload', global.toDoList);
-    });    
+    });
 
     mainWindow.on('focus', () => {
         const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
@@ -113,8 +113,8 @@ const secondaryMenuTemplate = [{
 }];
 
 if (onMac()) {
-    mainMenuTemplate.unshift({label: ''});
-    secondaryMenuTemplate.unshift({label: ''});
+    mainMenuTemplate.unshift({ label: '' });
+    secondaryMenuTemplate.unshift({ label: '' });
 }
 
 // Dev mode handler
@@ -173,7 +173,7 @@ ipcMain.on('item:delete', (e, item) => {
 })
 
 function readItemsFromFile() {
-    fs.readFile(PATH_TO_FILE, {encoding: 'utf-8'}, (err, data) => {
+    fs.readFile(PATH_TO_FILE, { encoding: 'utf-8' }, (err, data) => {
         if (err) throw error;
 
         let dataArray = (data.split(os.EOL)).filter((elem) => {
@@ -186,7 +186,7 @@ function readItemsFromFile() {
     });
 }
 
-function writeItemsToFile() {        
+function writeItemsToFile() {
     const updatedData = global.toDoList.getToDoList().join(os.EOL);
     fs.writeFile(PATH_TO_FILE, updatedData, (err) => {
         if (err) throw err;

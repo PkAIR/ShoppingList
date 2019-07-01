@@ -1,7 +1,7 @@
 class ToDoList {
     constructor(listOfItems) {
         this._listOfItems = listOfItems;
-        
+
         this.getToDoList = () => {
             return this._listOfItems;
         };
@@ -22,4 +22,4 @@ class ToDoList {
     }
 };
 
-module.exports  = ToDoList;
+module.exports = ToDoList;
