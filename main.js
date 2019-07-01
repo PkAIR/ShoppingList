@@ -11,7 +11,7 @@ const PATH_TO_FILE = 'assets/items.txt';
 global.toDoList = new ToDoList([]);
 readItemsFromFile();
 
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'production';
 
 let mainWindow;
 let addWindow;
