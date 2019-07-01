@@ -21,6 +21,7 @@ app.on('ready', () => {
     mainWindow = new BrowserWindow({
         width: 400,
         height: 600,
+        resizable: false,
         webPreferences: {
             nodeIntegration: true
         }
@@ -54,6 +55,7 @@ function createAddWindow() {
         title: 'Add New Shopping List Item',
         parent: mainWindow,
         modal: true,
+        resizable: false,
         webPreferences: {
             nodeIntegration: true
         }
