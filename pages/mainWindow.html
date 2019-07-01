@@ -39,7 +39,11 @@
     const MAIN_HEADER = 'Here we go:';
 
     ipcRenderer.on('item:add', (e, item) => {
-        addNewItem(item);
+        if (item == null) {
+            alert('Item was already added to a shopping list!')
+        } else {
+            addNewItem(item);
+        }
     });
 
     ipcRenderer.on('item:clear', (e, item) => {
