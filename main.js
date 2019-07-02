@@ -8,7 +8,7 @@ const os = require('os');
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 const PATH_TO_FILE = 'assets/items.txt';
 
-global.toDoList = new ToDoList([]);
+global.toDoList = new ToDoList({});
 readItemsFromFile();
 
 process.env.NODE_ENV = 'test';

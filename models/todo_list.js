@@ -1,27 +1,30 @@
+const uuid = require('uuid');
+
 class ToDoList {
-    constructor(listOfItems) {
-        this._listOfItems = listOfItems;
+    constructor(dictOfItems) {
+        this._dictOfItems = dictOfItems;
 
         this.getToDoList = () => {
-            return this._listOfItems;
+            return this._dictOfItems;
         };
 
         this.addItem = (item) => {
-            this._listOfItems.push(item);
-        };
-
-        this.deleteItem = (item) => {
-            this._listOfItems = this._listOfItems.filter((elem) => {
-                return elem != item;
+            this._dictOfItems.push({
+                key: uuid.v1(),
+                value: item
             });
         };
 
+        this.deleteItem = (item) => {
+            delete this._dictOfItems[item]
+        };
+
         this.hasItem = (item) => {
-            return this._listOfItems.indexOf(item) > -1;
+            return item in this._dictOfItems;
         };
 
         this.deleteToDoList = () => {
-            this._listOfItems = [];
+            this._dictOfItems = {};
         };
     }
 };
