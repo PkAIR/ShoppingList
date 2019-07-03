@@ -8,11 +8,8 @@ class ToDoList {
             return this._dictOfItems;
         };
 
-        this.addItem = (item) => {
-            this._dictOfItems.push({
-                key: uuid.v1(),
-                value: item
-            });
+        this.addItem = (key, value) => {
+            this._dictOfItems[key] = value;
         };
 
         this.deleteItem = (item) => {

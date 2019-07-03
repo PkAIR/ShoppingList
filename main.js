@@ -187,9 +187,13 @@ function readItemsFromFile() {
         });
 
         dataArray.forEach((elem) => {
-            global.toDoList.addItem(elem);
+            var splitted = elem.split(',')
+            console.log(elem[0])
+            global.toDoList.addItem(elem[0], elem[1]);
         });
     });
+
+    console.log(global.toDoList.getToDoList()["1"]);
 }
 
 function writeItemsToFile() {
