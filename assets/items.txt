@@ -1,2 +1,1 @@
-5defedb0-9e53-11e9-adbc-fd4458ed52e9,test2
-5defedb0-9e53-11e9-adbc-fd4458ed521119,secondItem
+{"a6954010-9e67-11e9-afa7-0d7573bbb6ee":"DuplicateTest","aa12a700-9e67-11e9-afa7-0d7573bbb6ee":"DuplicateTest","ae005bf0-9e67-11e9-afa7-0d7573bbb6ee":"New TODO"}

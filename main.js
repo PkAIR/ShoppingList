@@ -5,7 +5,6 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const uuidv1 = require('uuid/v1');
-var util = require('util')
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 const PATH_TO_FILE = 'assets/items.txt';

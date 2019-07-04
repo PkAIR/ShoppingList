@@ -52,7 +52,7 @@
     ul.addEventListener('dblclick', removeItem);
 
     function removeItem(e) {
-        let valueToDelete = e.target.textContent;
+        let valueToDelete = e.target.getAttribute('guid');
         ipcRenderer.send('item:delete', valueToDelete);
         e.target.remove();
         if (ul.children.length == 0) {
