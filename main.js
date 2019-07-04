@@ -157,17 +157,12 @@ function onMac() {
 }
 
 ipcMain.on('item:add', (e, item) => {
-    if (!global.toDoList.hasItem(item)) {
-        let guid = uuidv1();
-        mainWindow.webContents.send('item:add', guid, item);
-        global.toDoList.addItem(guid, item);
-        writeItemsToFile(global.toDoList.getToDoList());
-        addWindow.close();
-    } else {
-        addWindow.close();
-        mainWindow.webContents.send('item:add', null);
-        createAddWindow();
-    };
+    let guid = uuidv1();
+    let elem = { key: guid, value: item };
+    global.toDoList.addItems(elem);
+    writeItemsToFile(global.toDoList.getToDoList());
+    addWindow.close();
+    mainWindow.webContents.send('item:add', elem);
 })
 
 ipcMain.on('items:flush', (e, item) => {

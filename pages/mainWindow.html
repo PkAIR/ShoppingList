@@ -23,23 +23,24 @@
     } = electron;
 
     ipcRenderer.on('items:upload', (event, data) => {
-        let lastIndex = -1;
-        let todoList = data._dictOfItems;
         if (data._dictOfItems == {}) {
             changeHeaderTo(HEADER_NO_ELEMS);
         }
-        
+
         for (var guid in data._dictOfItems) {
-            addNewItem(guid, data._dictOfItems[guid]);
-        }        
+            addNewItem({
+                key: guid,
+                value: data._dictOfItems[guid]
+            });
+        }
     })
 
     const ul = document.querySelector('ul');
     const HEADER_NO_ELEMS = 'No Items To Display';
     const MAIN_HEADER = 'Here we go:';
 
-    ipcRenderer.on('item:add', (e, guid, item) => {
-        addNewItem(guid, item);
+    ipcRenderer.on('item:add', (e, item) => {
+        addNewItem(item);
     });
 
     ipcRenderer.on('item:clear', (e, item) => {
@@ -61,11 +62,11 @@
         }
     };
 
-    function addNewItem(guid, item) {
+    function addNewItem(item) {
         const li = document.createElement('li');
-        const itemText = document.createTextNode(item);
+        const itemText = document.createTextNode(item.value);
         li.appendChild(itemText);
-        li.setAttribute("guid", guid);
+        li.setAttribute("guid", item.key);
         ul.appendChild(li);
         changeHeaderTo(MAIN_HEADER);
         ul.className = 'collection';
