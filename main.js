@@ -185,17 +185,13 @@ function readItemsFromFile() {
     fs.readFile(PATH_TO_FILE, { encoding: 'utf-8' }, (err, data) => {
         if (err) throw error;
 
-        let dataArray = (data.split(os.EOL));
-        dataArray.forEach((elem) => {
-            var splitted = elem.split(',');
-            global.toDoList.addItem(splitted[0], splitted[1]);
-        });
+        global.toDoList.addItems(JSON.parse(data));
     });
 }
 
 function writeItemsToFile() {
     const updatedData = global.toDoList.getToDoList();
-    fs.writeFile(PATH_TO_FILE, util.inspect(updatedData), (err) => {
+    fs.writeFile(PATH_TO_FILE, JSON.stringify(updatedData), (err) => {
         if (err) throw err;
     });
 }

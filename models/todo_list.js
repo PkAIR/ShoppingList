@@ -12,6 +12,12 @@ class ToDoList {
             this._dictOfItems[key] = value;
         };
 
+        this.addItems = (values) => {
+            for (var key in values) {
+                this._dictOfItems[key] = values[key];
+            }            
+        };
+
         this.deleteItem = (item) => {
             delete this._dictOfItems[item];
         };
