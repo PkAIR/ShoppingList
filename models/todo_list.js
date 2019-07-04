@@ -13,7 +13,7 @@ class ToDoList {
         };
 
         this.deleteItem = (item) => {
-            delete this._dictOfItems[item]
+            delete this._dictOfItems[item];
         };
 
         this.hasItem = (item) => {
