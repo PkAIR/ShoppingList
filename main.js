@@ -4,7 +4,6 @@ const url = require('url');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const uuidv1 = require('uuid/v1');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 const PATH_TO_FILE = 'assets/items.txt';
@@ -157,12 +156,10 @@ function onMac() {
 }
 
 ipcMain.on('item:add', (e, item) => {
-    let guid = uuidv1();
-    let elem = { key: guid, value: item };
-    global.toDoList.addItems(elem);
+    global.toDoList.addItem(item);
     writeItemsToFile(global.toDoList.getToDoList());
     addWindow.close();
-    mainWindow.webContents.send('item:add', elem);
+    mainWindow.webContents.send('item:add', global.toDoList.getItemByValue(item));
 })
 
 ipcMain.on('items:flush', (e, item) => {

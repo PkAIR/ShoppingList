@@ -1,4 +1,4 @@
-const uuid = require('uuid');
+const uuidv1 = require('uuid/v1');
 
 class ToDoList {
     constructor(dictOfItems) {
@@ -8,14 +8,26 @@ class ToDoList {
             return this._dictOfItems;
         };
 
-        this.addItem = (key, value) => {
-            this._dictOfItems[key] = value;
+        this.addItem = (value) => {
+            let guid = uuidv1();
+            this._dictOfItems[guid] = value;
         };
 
         this.addItems = (values) => {
             for (var key in values) {
                 this._dictOfItems[key] = values[key];
             }            
+        };
+
+        this.getItemByValue = (value) => {
+            for (var item in this._dictOfItems) {
+                if (this._dictOfItems[item] == value) {
+                    return {
+                        key: item, 
+                        value: value
+                    };
+                }
+            }
         };
 
         this.deleteItem = (item) => {

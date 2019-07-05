@@ -26,13 +26,8 @@
         if (data._dictOfItems == {}) {
             changeHeaderTo(HEADER_NO_ELEMS);
         }
-
-        for (var guid in data._dictOfItems) {
-            addNewItem({
-                key: guid,
-                value: data._dictOfItems[guid]
-            });
-        }
+        
+        addListOfItems(data._dictOfItems)
     })
 
     const ul = document.querySelector('ul');
@@ -61,6 +56,15 @@
             changeHeaderTo(HEADER_NO_ELEMS);
         }
     };
+
+    function addListOfItems(listOfItems) {
+        for (var guid in listOfItems) {
+            addNewItem({
+                key: guid,
+                value: listOfItems[guid]
+            });
+        }
+    }
 
     function addNewItem(item) {
         const li = document.createElement('li');
