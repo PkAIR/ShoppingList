@@ -23,15 +23,11 @@
     } = electron;
 
     ipcRenderer.on('items:upload', (event, data) => {
-        let lastIndex = -1;
-        let todoList = data._listOfItems;
-        data._listOfItems.forEach((elem) => {
-            addNewItem(elem);
-        });
-
-        if (data._listOfItems.length == 0) {
+        if (data._dictOfItems == {}) {
             changeHeaderTo(HEADER_NO_ELEMS);
         }
+        
+        addListOfItems(data._dictOfItems)
     })
 
     const ul = document.querySelector('ul');
@@ -39,11 +35,7 @@
     const MAIN_HEADER = 'Here we go:';
 
     ipcRenderer.on('item:add', (e, item) => {
-        if (item == null) {
-            alert('Item was already added to a shopping list!')
-        } else {
-            addNewItem(item);
-        }
+        addNewItem(item);
     });
 
     ipcRenderer.on('item:clear', (e, item) => {
@@ -56,7 +48,7 @@
     ul.addEventListener('dblclick', removeItem);
 
     function removeItem(e) {
-        let valueToDelete = e.target.textContent;
+        let valueToDelete = e.target.getAttribute('guid');
         ipcRenderer.send('item:delete', valueToDelete);
         e.target.remove();
         if (ul.children.length == 0) {
@@ -65,10 +57,20 @@
         }
     };
 
+    function addListOfItems(listOfItems) {
+        for (var guid in listOfItems) {
+            addNewItem({
+                key: guid,
+                value: listOfItems[guid]
+            });
+        }
+    }
+
     function addNewItem(item) {
         const li = document.createElement('li');
-        const itemText = document.createTextNode(item);
+        const itemText = document.createTextNode(item.value);
         li.appendChild(itemText);
+        li.setAttribute("guid", item.key);
         ul.appendChild(li);
         changeHeaderTo(MAIN_HEADER);
         ul.className = 'collection';

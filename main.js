@@ -8,7 +8,7 @@ const os = require('os');
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 const PATH_TO_FILE = 'assets/items.txt';
 
-global.toDoList = new ToDoList([]);
+global.toDoList = new ToDoList({});
 readItemsFromFile();
 
 process.env.NODE_ENV = 'production';
@@ -158,16 +158,10 @@ function onMac() {
 }
 
 ipcMain.on('item:add', (e, item) => {
-    if (!global.toDoList.hasItem(item)) {
-        mainWindow.webContents.send('item:add', item);
-        global.toDoList.addItem(item);
-        writeItemsToFile(global.toDoList.getToDoList());
-        addWindow.close();
-    } else {
-        addWindow.close();
-        mainWindow.webContents.send('item:add', null);
-        createAddWindow();
-    };
+    global.toDoList.addItem(item);
+    writeItemsToFile(global.toDoList.getToDoList());
+    addWindow.close();
+    mainWindow.webContents.send('item:add', global.toDoList.getItemByValue(item));
 })
 
 ipcMain.on('items:flush', (e, item) => {
@@ -184,19 +178,13 @@ function readItemsFromFile() {
     fs.readFile(PATH_TO_FILE, { encoding: 'utf-8' }, (err, data) => {
         if (err) throw error;
 
-        let dataArray = (data.split(os.EOL)).filter((elem) => {
-            return elem.trim();
-        });
-
-        dataArray.forEach((elem) => {
-            global.toDoList.addItem(elem);
-        });
+        global.toDoList.addItems(JSON.parse(data));
     });
 }
 
 function writeItemsToFile() {
-    const updatedData = global.toDoList.getToDoList().join(os.EOL);
-    fs.writeFile(PATH_TO_FILE, updatedData, (err) => {
+    const updatedData = global.toDoList.getToDoList();
+    fs.writeFile(PATH_TO_FILE, JSON.stringify(updatedData), (err) => {
         if (err) throw err;
     });
 }
