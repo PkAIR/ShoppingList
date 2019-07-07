@@ -158,20 +158,26 @@ function onMac() {
 }
 
 ipcMain.on('item:add', (e, item) => {
-    mainWindow.webContents.send('item:add', item);
-    global.toDoList.addItem(item);
-    writeItemsToFile(global.toDoList.getToDoList())
-    addWindow.close();
+    if (!global.toDoList.hasItem(item)) {
+        mainWindow.webContents.send('item:add', item);
+        global.toDoList.addItem(item);
+        writeItemsToFile(global.toDoList.getToDoList());
+        addWindow.close();
+    } else {
+        addWindow.close();
+        mainWindow.webContents.send('item:add', null);
+        createAddWindow();
+    };
 })
 
 ipcMain.on('items:flush', (e, item) => {
     global.toDoList.deleteToDoList();
-    writeItemsToFile(global.toDoList.getToDoList())
+    writeItemsToFile(global.toDoList.getToDoList());
 })
 
 ipcMain.on('item:delete', (e, item) => {
     global.toDoList.deleteItem(item);
-    writeItemsToFile(global.toDoList.getToDoList())
+    writeItemsToFile(global.toDoList.getToDoList());
 })
 
 function readItemsFromFile() {

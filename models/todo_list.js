@@ -16,6 +16,10 @@ class ToDoList {
             });
         };
 
+        this.hasItem = (item) => {
+            return this._listOfItems.indexOf(item) > -1;
+        };
+
         this.deleteToDoList = () => {
             this._listOfItems = [];
         };
