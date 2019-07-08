@@ -26,7 +26,7 @@
         if (data._dictOfItems == {}) {
             changeHeaderTo(HEADER_NO_ELEMS);
         }
-        
+
         addListOfItems(data._dictOfItems)
     })
 
@@ -42,7 +42,7 @@
         ul.className = '';
         ul.innerHTML = '';
         changeHeaderTo(HEADER_NO_ELEMS);
-        e.sender.send('items:flush', item);
+        e.sender.send('items:flush');
     });
 
     ul.addEventListener('dblclick', removeItem);

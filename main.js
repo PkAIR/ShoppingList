@@ -126,7 +126,7 @@ if (process.env.NODE_ENV !== 'production') {
         accelerator: onMac() ? 'Command+I' : 'Ctrl+I',
         submenu: [{
                 label: 'Toggle DevTools',
-                click(item, focusedWindows) {
+                click(_item, focusedWindows) {
                     focusedWindows.toggleDevTools();
                 }
             },
@@ -141,7 +141,7 @@ if (process.env.NODE_ENV !== 'production') {
         accelerator: onMac() ? 'Command+I' : 'Ctrl+I',
         submenu: [{
                 label: 'Toggle DevTools',
-                click(item, focusedWindows) {
+                click(_item, focusedWindows) {
                     focusedWindows.toggleDevTools();
                 }
             },
@@ -157,19 +157,19 @@ function onMac() {
     return process.platform == 'darwin';
 }
 
-ipcMain.on('item:add', (e, item) => {
+ipcMain.on('item:add', (_e, item) => {
     global.toDoList.addItem(item);
     writeItemsToFile(global.toDoList.getToDoList());
     addWindow.close();
     mainWindow.webContents.send('item:add', global.toDoList.getItemByValue(item));
 })
 
-ipcMain.on('items:flush', (e, item) => {
+ipcMain.on('items:flush', () => {
     global.toDoList.deleteToDoList();
     writeItemsToFile(global.toDoList.getToDoList());
 })
 
-ipcMain.on('item:delete', (e, item) => {
+ipcMain.on('item:delete', (_e, item) => {
     global.toDoList.deleteItem(item);
     writeItemsToFile(global.toDoList.getToDoList());
 })
