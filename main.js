@@ -16,7 +16,6 @@ process.env.NODE_ENV = 'production';
 let mainWindow;
 let addWindow;
 
-// Main method
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
         width: 400,
@@ -119,7 +118,6 @@ if (onMac()) {
     secondaryMenuTemplate.unshift({ label: '' });
 }
 
-// Dev mode handler
 if (process.env.NODE_ENV !== 'production') {
     mainMenuTemplate.push({
         label: 'Developer Tools',
@@ -152,12 +150,11 @@ if (process.env.NODE_ENV !== 'production') {
     });
 }
 
-// Base check method for a platform
 function onMac() {
     return process.platform == 'darwin';
 }
 
-ipcMain.on('item:add', (_e, item) => {
+ipcMain.on('item:add', (_, item) => {
     global.toDoList.addItem(item);
     writeItemsToFile(global.toDoList.getToDoList());
     addWindow.close();
@@ -169,7 +166,7 @@ ipcMain.on('items:flush', () => {
     writeItemsToFile(global.toDoList.getToDoList());
 })
 
-ipcMain.on('item:delete', (_e, item) => {
+ipcMain.on('item:delete', (_, item) => {
     global.toDoList.deleteItem(item);
     writeItemsToFile(global.toDoList.getToDoList());
 })
