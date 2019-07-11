@@ -21,6 +21,9 @@
     const {
         ipcRenderer
     } = electron;
+    const ul = document.querySelector('ul');
+    const HEADER_NO_ELEMS = 'No Items To Display';
+    const MAIN_HEADER = 'Here we go:';
 
     ipcRenderer.on('items:upload', (event, data) => {
         if (data._dictOfItems == {}) {
@@ -29,10 +32,6 @@
         
         addListOfItems(data._dictOfItems)
     })
-
-    const ul = document.querySelector('ul');
-    const HEADER_NO_ELEMS = 'No Items To Display';
-    const MAIN_HEADER = 'Here we go:';
 
     ipcRenderer.on('item:add', (e, item) => {
         addNewItem(item);
@@ -48,8 +47,8 @@
     ul.addEventListener('dblclick', removeItem);
 
     function removeItem(e) {
-        let valueToDelete = e.target.getAttribute('guid');
-        ipcRenderer.send('item:delete', valueToDelete);
+        let guidToDelete = e.target.getAttribute('guid');
+        ipcRenderer.send('item:delete', guidToDelete);
         e.target.remove();
         if (ul.children.length == 0) {
             ul.className = '';
