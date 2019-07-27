@@ -7,7 +7,7 @@ const fs = require('fs');
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 const PATH_TO_FILE = 'assets/items.txt';
 
-global.toDoList = new ToDoList([]);
+global.toDoList = new ToDoList({});
 readItemsFromFile();
 
 process.env.NODE_ENV = 'production';
@@ -15,7 +15,6 @@ process.env.NODE_ENV = 'production';
 let mainWindow;
 let addWindow;
 
-// Main method
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
         width: 400,
@@ -118,14 +117,13 @@ if (onMac()) {
     secondaryMenuTemplate.unshift({ label: '' });
 }
 
-// Dev mode handler
 if (process.env.NODE_ENV !== 'production') {
     mainMenuTemplate.push({
         label: 'Developer Tools',
         accelerator: onMac() ? 'Command+I' : 'Ctrl+I',
         submenu: [{
                 label: 'Toggle DevTools',
-                click(item, focusedWindows) {
+                click(_item, focusedWindows) {
                     focusedWindows.toggleDevTools();
                 }
             },
@@ -140,7 +138,7 @@ if (process.env.NODE_ENV !== 'production') {
         accelerator: onMac() ? 'Command+I' : 'Ctrl+I',
         submenu: [{
                 label: 'Toggle DevTools',
-                click(item, focusedWindows) {
+                click(_item, focusedWindows) {
                     focusedWindows.toggleDevTools();
                 }
             },
@@ -151,45 +149,38 @@ if (process.env.NODE_ENV !== 'production') {
     });
 }
 
-// Base check method for a platform
 function onMac() {
     return process.platform == 'darwin';
 }
 
-ipcMain.on('item:add', (e, item) => {
-    mainWindow.webContents.send('item:add', item);
+ipcMain.on('item:add', (_, item) => {
     global.toDoList.addItem(item);
-    writeItemsToFile(global.toDoList.getToDoList())
+    writeItemsToFile(global.toDoList.getToDoList());
     addWindow.close();
+    mainWindow.webContents.send('item:add', global.toDoList.getItemByValue(item));
 })
 
-ipcMain.on('items:flush', (e, item) => {
+ipcMain.on('items:flush', () => {
     global.toDoList.deleteToDoList();
-    writeItemsToFile(global.toDoList.getToDoList())
+    writeItemsToFile(global.toDoList.getToDoList());
 })
 
-ipcMain.on('item:delete', (e, item) => {
+ipcMain.on('item:delete', (_, item) => {
     global.toDoList.deleteItem(item);
-    writeItemsToFile(global.toDoList.getToDoList())
+    writeItemsToFile(global.toDoList.getToDoList());
 })
 
 function readItemsFromFile() {
     fs.readFile(PATH_TO_FILE, { encoding: 'utf-8' }, (err, data) => {
         if (err) throw error;
 
-        let dataArray = (data.split(os.EOL)).filter((elem) => {
-            return elem.trim();
-        });
-
-        dataArray.forEach((elem) => {
-            global.toDoList.addItem(elem);
-        });
+        global.toDoList.addItems(JSON.parse(data));
     });
 }
 
 function writeItemsToFile() {
-    const updatedData = global.toDoList.getToDoList().join(os.EOL);
-    fs.writeFile(PATH_TO_FILE, updatedData, (err) => {
+    const updatedData = global.toDoList.getToDoList();
+    fs.writeFile(PATH_TO_FILE, JSON.stringify(updatedData), (err) => {
         if (err) throw err;
     });
 }

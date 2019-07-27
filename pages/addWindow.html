@@ -28,9 +28,9 @@
 
     function submitForm(e) {
         e.preventDefault();
-        const item = document.querySelector('#item').value.trim();
+        const item = document.querySelector('#item').value;
         if (item.trim()) {
-            ipcRenderer.send('item:add', item);
+            ipcRenderer.send('item:add', item.trim());
         }
     }
 </script>
