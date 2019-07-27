@@ -3,7 +3,6 @@ const ToDoList = require('./models/todo_list');
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
-const os = require('os');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 const PATH_TO_FILE = 'assets/items.txt';
